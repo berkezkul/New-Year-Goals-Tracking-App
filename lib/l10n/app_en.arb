@@ -1,0 +1,100 @@
+{
+    "appTitle": "New Year Goals",
+    "goals": "Goals",
+    "notifications": "Notifications",
+    "statistics": "Statistics",
+    "addGoal": "New Goal",
+    "categoryAll": "All",
+    "categoryHealth": "Health",
+    "categoryFinance": "Finance",
+    "categoryCareer": "Career",
+    "categoryEducation": "Education",
+    "categorySports": "Sports",
+    "categoryHobby": "Hobby",
+    "categoryTravel": "Travel",
+    "categoryPersonal": "Personal",
+    "goalTitle": "Title",
+    "goalCategory": "Category",
+    "goalDescription": "Description",
+    "goalTargetAmount": "Target Amount",
+    "goalDueDate": "Due Date",
+    "settingsLanguage": "Language",
+    "settingsTheme": "Theme",
+    "settingsDarkMode": "Dark Mode",
+    "settingsLightMode": "Light Mode",
+    "messageGoalAdded": "Goal added successfully!",
+    "messageGoalUpdated": "Goal updated",
+    "messageGoalDeleted": "Goal deleted",
+    "messageError": "Error occurred: {error}",
+    "@messageError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "addNewGoalCard": "✨ Ready to turn your dreams into reality?\nAdd a new goal and get started! 🎯",
+    "noGoalsYet": "No goals added yet",
+    "noGoalsInCategory": "No goals in {category} category",
+    "@noGoalsInCategory": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            }
+        }
+    },
+    "progressUpdated": "Progress updated",
+    "updateFailed": "Update failed: {error}",
+    "@updateFailed": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "categories": "Categories",
+    "home": "Home",
+    "calendar": "Calendar",
+    "settings": "Settings",
+    "selectCategory": "Select Category",
+    "enterTitle": "Enter Title",
+    "enterDescription": "Enter Description",
+    "enterAmount": "Enter Amount",
+    "selectDate": "Select Date",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "confirmDelete": "Are you sure you want to delete?",
+    "yes": "Yes",
+    "no": "No",
+    "goalProgress": "Goal Progress",
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "notStarted": "Not Started",
+    "daysLeft": "Days Left: {days}",
+    "@daysLeft": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "motivationQuote": "Motivation Quote",
+    "addCategory": "Add Category",
+    "categoryName": "Category Name",
+    "categoryExists": "This category already exists",
+    "categoryAdded": "Category added",
+    "categoryDeleted": "Category deleted",
+    "noCategorySelected": "No category selected",
+    "getString": "{key}",
+    "@getString": {
+        "description": "Get string value by key",
+        "placeholders": {
+            "key": {
+                "type": "String"
+            }
+        }
+    },
+    "currentProgress": "Current Progress"
+} 

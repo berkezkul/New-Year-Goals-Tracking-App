@@ -1,0 +1,100 @@
+{
+    "appTitle": "Yılbaşı Hedefleri",
+    "goals": "Hedefler",
+    "notifications": "Bildirimler",
+    "statistics": "İstatistikler",
+    "addGoal": "Yeni Hedef",
+    "categoryAll": "Tümü",
+    "categoryHealth": "Sağlık",
+    "categoryFinance": "Finans",
+    "categoryCareer": "Kariyer",
+    "categoryEducation": "Eğitim",
+    "categorySports": "Spor",
+    "categoryHobby": "Hobi",
+    "categoryTravel": "Seyahat",
+    "categoryPersonal": "Kişisel",
+    "goalTitle": "Başlık",
+    "goalCategory": "Kategori",
+    "goalDescription": "Açıklama",
+    "goalTargetAmount": "Hedef Miktar",
+    "goalDueDate": "Bitiş Tarihi",
+    "settingsLanguage": "Dil",
+    "settingsTheme": "Tema",
+    "settingsDarkMode": "Karanlık Mod",
+    "settingsLightMode": "Aydınlık Mod",
+    "messageGoalAdded": "Hedef başarıyla eklendi!",
+    "messageGoalUpdated": "Hedef güncellendi",
+    "messageGoalDeleted": "Hedef silindi",
+    "messageError": "Hata oluştu: {error}",
+    "@messageError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "addNewGoalCard": "✨ Hayallerinizi gerçeğe dönüştürmeye hazır mısınız?\nYeni bir hedef ekleyin ve başlayın! 🎯",
+    "noGoalsYet": "Henüz hedef eklenmemiş",
+    "noGoalsInCategory": "{category} kategorisinde hedef bulunmuyor",
+    "@noGoalsInCategory": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            }
+        }
+    },
+    "progressUpdated": "İlerleme güncellendi",
+    "updateFailed": "Güncelleme başarısız: {error}",
+    "@updateFailed": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "categories": "Kategoriler",
+    "home": "Ana Sayfa",
+    "calendar": "Takvim",
+    "settings": "Ayarlar",
+    "selectCategory": "Kategori Seçin",
+    "enterTitle": "Başlık Girin",
+    "enterDescription": "Açıklama Girin",
+    "enterAmount": "Miktar Girin",
+    "selectDate": "Tarih Seçin",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "delete": "Sil",
+    "edit": "Düzenle",
+    "confirmDelete": "Silmek istediğinize emin misiniz?",
+    "yes": "Evet",
+    "no": "Hayır",
+    "goalProgress": "Hedef İlerlemesi",
+    "completed": "Tamamlandı",
+    "inProgress": "Devam Ediyor",
+    "notStarted": "Başlanmadı",
+    "daysLeft": "Kalan Gün: {days}",
+    "@daysLeft": {
+        "placeholders": {
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "motivationQuote": "Motivasyon Sözü",
+    "addCategory": "Kategori Ekle",
+    "categoryName": "Kategori Adı",
+    "categoryExists": "Bu kategori zaten mevcut",
+    "categoryAdded": "Kategori eklendi",
+    "categoryDeleted": "Kategori silindi",
+    "noCategorySelected": "Kategori seçilmedi",
+    "getString": "{key}",
+    "@getString": {
+        "description": "Anahtara göre metin değeri al",
+        "placeholders": {
+            "key": {
+                "type": "String"
+            }
+        }
+    },
+    "currentProgress": "Mevcut İlerleme"
+} 

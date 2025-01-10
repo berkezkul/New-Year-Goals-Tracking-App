@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "693253024986",
+    "project_id": "new-year-goals-app",
+    "storage_bucket": "new-year-goals-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693253024986:android:ed05e7cdf1d197a172c9e3",
+        "android_client_info": {
+          "package_name": "com.newyeargoal.berkeozkul.new_year_goals_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTG_Cp-JxT12J3PhA1OyxqBrAZfxlfg44"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
