@@ -2,30 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // Modern renk paleti
-  static const Color primaryLight = Color(0xFF000000);
-  static const Color secondaryLight = Color(0xFFFF9966);
-  static const Color accentLight = Color(0xFFFFD93D);
-  static const Color surfaceLight = Color(0xFFF4F3EE);
+  // Modern ve soft renk paleti (60-30-10 kuralına göre)
+  // Ana renk (60%)
+  static const Color primaryLight = Color(0xFF4DA1A9); // Soft mavi
+  static const Color backgroundLight = Color(0xFFF5EFE7);
+
+  // İkincil renk (30%)
+  static const Color secondaryLight = Color(0xFF79D7BE); // Soft yeşil
+  static const Color surfaceLight = Color(0xFFFFFFFF);
+
+  // Aksan renk (10%)
+  static const Color accentLight = Color(0xFF2E5077); // Koyu mavi
+
+  // Kart ve diğer renkler
   static const Color cardLight = Color(0xFFFFFBF2);
+  static const Color textLight = Color(0xFF2E5077);
 
   // Dark tema renkleri
-  static const Color primaryDark = Color(0xFF000000);
-  static const Color secondaryDark = Color(0xFFFF9966);
-  static const Color accentDark = Color(0xFFFFD93D);
-  static const Color surfaceDark = Color(0xFF121212);
-  static const Color cardDark = Color(0xFF1E1E1E);
+  static const Color primaryDark = Color(0xFF79D7BE);
+  static const Color backgroundDark = Color(0xFF213555);
+  static const Color secondaryDark = Color(0xFF4DA1A9);
+  static const Color surfaceDark = Color(0xFF012351);
+  static const Color accentDark = Color(0xFFF5EFE7);
+  static const Color cardDark = Color(0xFF2E5077);
+  static const Color textDark = Color(0xFFF5EFE7);
 
   // Kategori renkleri
   static const Map<String, Color> categoryColors = {
-    'categoryHealth': Color(0xFFFF9966), // Turuncu
-    'categoryFinance': Color(0xFFFFD93D), // Sarı
-    'categoryCareer': Color(0xFFE6E6FA), // Lavanta
-    'categoryEducation': Color(0xFFFFE4E1), // Açık pembe
-    'categorySports': Color(0xFFE0FFFF), // Açık turkuaz
-    'categoryHobby': Color(0xFFFFF0F5), // Lavanta pembesi
-    'categoryTravel': Color(0xFFF0FFF0), // Açık yeşil
-    'categoryPersonal': Color(0xFFFFFACD), // Açık sarı
+    'categoryHealth': Color(0xFF79D7BE), // Soft yeşil
+    'categoryFinance': Color(0xFF4DA1A9), // Soft mavi
+    'categoryCareer': Color(0xFF2E5077), // Koyu mavi
+    'categoryEducation': Color(0xFF6F9EAF), // Orta mavi
+    'categorySports': Color(0xFF90C8AC), // Açık yeşil
+    'categoryHobby': Color(0xFF8EB8E5), // Açık mavi
+    'categoryTravel': Color(0xFF7DA9C7), // Gök mavisi
+    'categoryPersonal': Color(0xFF86A7C3), // Gri mavi
   };
 
   static ThemeData get lightTheme {
@@ -53,7 +64,7 @@ class AppTheme {
         titleTextStyle: GoogleFonts.inter(
           fontSize: 28,
           fontWeight: FontWeight.bold,
-          color: Colors.black,
+          color: surfaceDark,
         ),
         iconTheme: const IconThemeData(color: Colors.black),
       ),
@@ -150,7 +161,7 @@ class AppTheme {
       // Card teması
       cardTheme: CardTheme(
         elevation: 0,
-        color: Colors.white.withOpacity(0.05),
+        color: cardLight,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
@@ -165,7 +176,7 @@ class AppTheme {
         titleTextStyle: GoogleFonts.inter(
           fontSize: 28,
           fontWeight: FontWeight.bold,
-          color: Colors.white,
+          color: secondaryDark,
         ),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -185,13 +196,16 @@ class AppTheme {
         titleLarge: GoogleFonts.inter(
           fontSize: 24,
           fontWeight: FontWeight.w600,
-          color: Colors.white,
+          color: primaryDark,
         ),
         bodyLarge: GoogleFonts.inter(
           fontSize: 16,
-          color: Colors.white.withOpacity(0.87),
+          color: secondaryDark,
         ),
       ),
+
+
+
     );
   }
 }

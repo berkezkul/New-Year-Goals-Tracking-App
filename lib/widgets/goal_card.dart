@@ -6,94 +6,99 @@ import '../theme/app_theme.dart';
 class GoalCard extends StatelessWidget {
   final Goal goal;
   final VoidCallback onTap;
-  final Function(double) onProgressUpdate;
-  final String categoryName;
+  final VoidCallback onLongPress;
 
   const GoalCard({
-    super.key,
+    Key? key,
     required this.goal,
     required this.onTap,
-    required this.onProgressUpdate,
-    required this.categoryName,
-  });
+    required this.onLongPress, required Future<Null> Function(double newProgress) onProgressUpdate, required String categoryName,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final progress = goal.currentAmount / goal.targetAmount;
-    final isCompleted = progress >= 1.0;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Card(
-      elevation: 0,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(16),
       ),
-      color: isCompleted ? Colors.green.withOpacity(0.1) : null,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(24),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: goal.currentAmount >= goal.targetAmount
+              ? Colors.green.withOpacity(0.1)
+              : const Color(0xFFFF9966).withOpacity(0.1),
+        ),
+        child: ListTile(
+          onTap: onTap,
+          onLongPress: onLongPress,
+          contentPadding: const EdgeInsets.all(16),
+          title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          goal.title,
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        Text(
-                          categoryName,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ],
+                    child: Text(
+                      goal.title,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppTheme.surfaceDark,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                   ),
                   Text(
                     '${goal.currentAmount}/${goal.targetAmount}',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: isCompleted ? Colors.green : null,
-                        ),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppTheme.surfaceDark),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
-              Text(
-                goal.description,
-                style: Theme.of(context).textTheme.bodyLarge,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 16),
-              GestureDetector(
-                onTapUp: (details) {
-                  final RenderBox box = context.findRenderObject() as RenderBox;
-                  final localPosition = details.localPosition;
-                  final progressBarWidth = box.size.width;
-                  final newProgress = localPosition.dx / progressBarWidth;
-                  onProgressUpdate(newProgress.clamp(0.0, 1.0));
-                },
-                child: LinearProgressIndicator(
-                  value: progress,
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primary.withOpacity(0.2),
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    isCompleted
-                        ? Colors.green
-                        : Theme.of(context).colorScheme.primary,
+              SizedBox(
+                width: double.infinity,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: progress,
+                    backgroundColor: Colors.grey.withOpacity(0.2),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      goal.currentAmount >= goal.targetAmount
+                          ? Colors.green
+                          : const Color(0xFFFF9966),
+                    ),
+                    minHeight: 8,
                   ),
-                  borderRadius: BorderRadius.circular(8),
                 ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    goal.category,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold,
+                          color: isDarkMode ? AppTheme.surfaceDark : Colors.black54,
+                        ),
+                  ),
+                  Text(
+                    _formatDueDate(goal.dueDate),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold,
+                          color: isDarkMode ? AppTheme.secondaryDark : Colors.black54, fontSize: 14
+                        ),
+                  ),
+                ],
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  String _formatDueDate(DateTime date) {
+    return '${date.day}/${date.month}/${date.year}';
   }
 }

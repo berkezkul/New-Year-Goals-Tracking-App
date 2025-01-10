@@ -23,7 +23,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
     return Column(
       children: [
         // Motivasyon kartı
-        MotivationCard(),
+        const MotivationCard(),
 
         // Kategori filtreleme chips
         Padding(
@@ -40,9 +40,19 @@ class _GoalsScreenState extends State<GoalsScreen> {
                       _selectedCategory = 'all';
                     });
                   },
-                  backgroundColor: Theme.of(context).chipTheme.backgroundColor,
-                  selectedColor: Theme.of(context).chipTheme.selectedColor,
-                  labelStyle: Theme.of(context).chipTheme.labelStyle,
+                  backgroundColor: Colors.white,
+                  selectedColor: const Color(0xFFFF9966).withOpacity(0.2),
+                  checkmarkColor: const Color(0xFFFF9966),
+                  labelStyle: TextStyle(
+                    color: _selectedCategory == 'all'
+                        ? const Color(0xFFFF9966)
+                        : Colors.black87,
+                  ),
+                  side: BorderSide(
+                    color: _selectedCategory == 'all'
+                        ? const Color(0xFFFF9966)
+                        : Colors.grey.shade300,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -52,13 +62,29 @@ class _GoalsScreenState extends State<GoalsScreen> {
                       padding: const EdgeInsets.only(right: 8),
                       child: FilterChip(
                         label: Text(CategoryData.getCategoryName(
-                            category.key, context)),
-                        selected: _selectedCategory == category.key,
+                            category.name, context)),
+                        selected: _selectedCategory == category.name,
                         onSelected: (bool selected) {
                           setState(() {
                             _selectedCategory = category.key;
                           });
                         },
+                        backgroundColor: Colors.white,
+                        selectedColor: const Color(0xFFFF9966).withOpacity(0.2),
+                        checkmarkColor: const Color(0xFFFF9966),
+                        labelStyle: TextStyle(
+                          color: _selectedCategory == category.key
+                              ? const Color(0xFFFF9966)
+                              : Colors.black87,
+                        ),
+                        side: BorderSide(
+                          color: _selectedCategory == category.key
+                              ? const Color(0xFFFF9966)
+                              : Colors.grey.shade300,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                     )),
               ],
@@ -88,7 +114,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
               if (filteredGoals.isEmpty) {
                 return EmptyState(
                   imagePath: 'assets/images/empty_goals.png',
-                  message: AppLocalizations.of(context)!.noGoalsYet,
+                  message: AppLocalizations.of(context).noGoalsYet,
                 );
               }
 
@@ -111,7 +137,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
                       );
                     },
                     categoryName:
-                        CategoryData.getCategoryName(goal.category, context),
+                        CategoryData.getCategoryName(goal.category, context), onLongPress: () {  },
                   );
                 },
               );
@@ -123,6 +149,8 @@ class _GoalsScreenState extends State<GoalsScreen> {
   }
 
   void _showGoalUpdateDialog(BuildContext context, Goal goal) {
+    double tempProgress = goal.currentAmount / goal.targetAmount;
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -131,14 +159,12 @@ class _GoalsScreenState extends State<GoalsScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-                '${AppLocalizations.of(context)!.goalProgress}: ${goal.currentAmount}/${goal.targetAmount}'),
+                '${AppLocalizations.of(context).goalProgress}: ${goal.currentAmount}/${goal.targetAmount}'),
             const SizedBox(height: 16),
             Slider(
-              value: goal.currentAmount / goal.targetAmount,
-              onChanged: (value) async {
-                final newAmount = (value * goal.targetAmount).round();
-                await _databaseService.updateGoalProgress(goal.id, newAmount);
-                Navigator.pop(context);
+              value: tempProgress,
+              onChanged: (value) {
+                tempProgress = value;
               },
             ),
           ],
@@ -146,7 +172,23 @@ class _GoalsScreenState extends State<GoalsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(AppLocalizations.of(context)!.cancel),
+            child: Text(AppLocalizations.of(context).cancel),
+          ),
+          FilledButton(
+            onPressed: () async {
+              final newAmount = (tempProgress * goal.targetAmount).round();
+              await _databaseService.updateGoalProgress(goal.id, newAmount);
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(AppLocalizations.of(context).progressUpdated),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+                Navigator.pop(context);
+              }
+            },
+            child: Text(AppLocalizations.of(context).save),
           ),
         ],
       ),

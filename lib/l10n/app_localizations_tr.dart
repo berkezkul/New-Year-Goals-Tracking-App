@@ -174,7 +174,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get motivationQuote => 'Motivasyon Sözü';
+  String get motivationQuote => 'Hedeflerini Ekle, Takip Et, Tamamla !';
 
   @override
   String get addCategory => 'Kategori Ekle';

@@ -110,5 +110,8 @@ flutter:
     - assets/images/empty_goals.png
     - assets/images/goal_complete.png
     - assets/images/goal_progress.png
+    - assets/images/add_goals.png
+    - assets/images/motivation_bg.jpg
+    - assets/images/motivation_background.png
 
   generate: true

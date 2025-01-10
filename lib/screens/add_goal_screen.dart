@@ -298,7 +298,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         });
       },
       validator: (value) =>
-          value == null ? localizations.noCategorySelected : null,
+      value == null ? localizations.noCategorySelected : null,
     );
   }
 }

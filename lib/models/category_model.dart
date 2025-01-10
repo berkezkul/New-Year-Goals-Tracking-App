@@ -23,6 +23,25 @@ class CategoryData {
 
   static String getCategoryName(String key, BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return localizations.getString(key);
+    switch (key) {
+      case 'categoryHealth':
+        return localizations.categoryHealth;
+      case 'categoryFinance':
+        return localizations.categoryFinance;
+      case 'categoryCareer':
+        return localizations.categoryCareer;
+      case 'categoryEducation':
+        return localizations.categoryEducation;
+      case 'categorySports':
+        return localizations.categorySports;
+      case 'categoryHobby':
+        return localizations.categoryHobby;
+      case 'categoryTravel':
+        return localizations.categoryTravel;
+      case 'categoryPersonal':
+        return localizations.categoryPersonal;
+      default:
+        return key;
+    }
   }
 }

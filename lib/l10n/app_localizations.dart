@@ -416,7 +416,7 @@ abstract class AppLocalizations {
   /// No description provided for @motivationQuote.
   ///
   /// In en, this message translates to:
-  /// **'Motivation Quote'**
+  /// **'Add, Track, Complete Your Goals!'**
   String get motivationQuote;
 
   /// No description provided for @addCategory.

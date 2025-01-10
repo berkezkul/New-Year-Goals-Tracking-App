@@ -174,7 +174,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get motivationQuote => 'Motivation Quote';
+  String get motivationQuote => 'Add, Track, Complete Your Goals!';
 
   @override
   String get addCategory => 'Add Category';

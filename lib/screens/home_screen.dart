@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          AppLocalizations.of(context)!.appTitle,
+          AppLocalizations.of(context).appTitle,
           style: GoogleFonts.inter(
             fontSize: 28,
             fontWeight: FontWeight.bold,
@@ -103,8 +103,11 @@ class _HomeScreenState extends State<HomeScreen> {
             MaterialPageRoute(builder: (context) => const AddGoalScreen()),
           );
         },
+        backgroundColor: Colors.red,
+        focusColor: Colors.orange,
+        hoverColor: Colors.orangeAccent,
         icon: const Icon(Icons.add),
-        label: Text(AppLocalizations.of(context)!.addGoal),
+        label: Text(AppLocalizations.of(context).addGoal),
       ),
     );
   }
