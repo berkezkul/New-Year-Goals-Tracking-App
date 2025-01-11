@@ -98,9 +98,25 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddGoalScreen()),
+          showDialog(
+            context: context,
+            barrierColor: Colors.black54,
+            useSafeArea: true,
+            builder: (BuildContext context) {
+              return Stack(
+                children: [
+                  IgnorePointer(
+                    child: Opacity(
+                      opacity: 0.7,
+                      child: Container(
+                        color: Colors.transparent,
+                      ),
+                    ),
+                  ),
+                  const AddGoalDialog(),
+                ],
+              );
+            },
           );
         },
         backgroundColor: Colors.red,

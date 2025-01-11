@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import '../models/category_model.dart';
 import '../models/goal_model.dart';
 import '../services/database_service.dart';
 import 'package:intl/intl.dart';
@@ -12,35 +13,22 @@ import 'package:confetti/confetti.dart';
 import '../services/animation_service.dart';
 import '../l10n/app_localizations.dart';
 
-class AddGoalScreen extends StatefulWidget {
-  const AddGoalScreen({Key? key}) : super(key: key);
+class AddGoalDialog extends StatefulWidget {
+  const AddGoalDialog({super.key});
 
   @override
-  State<AddGoalScreen> createState() => _AddGoalScreenState();
+  State<AddGoalDialog> createState() => _AddGoalDialogState();
 }
 
-class _AddGoalScreenState extends State<AddGoalScreen> {
+class _AddGoalDialogState extends State<AddGoalDialog> {
   final _formKey = GlobalKey<FormState>();
   final _databaseService = DatabaseService();
   final _titleController = TextEditingController();
-  final _categoryController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _targetAmountController = TextEditingController();
-
-  DateTime _dueDate = DateTime.now();
-  final List<String> _categories = [
-    'categoryHealth',
-    'categoryFinance',
-    'categoryCareer',
-    'categoryEducation',
-    'categorySports',
-    'categoryHobby',
-    'categoryTravel',
-    'categoryPersonal'
-  ];
-
   late ConfettiController _confettiController;
   String _selectedCategory = 'categoryHealth';
+  DateTime _dueDate = DateTime.now();
 
   @override
   void initState() {
@@ -53,7 +41,6 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
   void dispose() {
     _confettiController.dispose();
     _titleController.dispose();
-    _categoryController.dispose();
     _descriptionController.dispose();
     _targetAmountController.dispose();
     super.dispose();
@@ -61,66 +48,151 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.addGoal),
-      ),
-      body: SingleChildScrollView(
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      backgroundColor: isDarkMode ? const Color(0xFF1A237E) : Colors.white,
+      child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(20),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        _buildInputField(
-                          controller: _titleController,
-                          label: AppLocalizations.of(context)!.goalTitle,
-                          icon: Icons.title,
-                        ),
-                        const SizedBox(height: 16),
-                        _buildCategoryPicker(),
-                        const SizedBox(height: 16),
-                        _buildInputField(
-                          controller: _descriptionController,
-                          label: AppLocalizations.of(context)!.goalDescription,
-                          icon: Icons.description,
-                          maxLines: 3,
-                        ),
-                        const SizedBox(height: 16),
-                        _buildInputField(
-                          controller: _targetAmountController,
-                          label: AppLocalizations.of(context)!.goalTargetAmount,
-                          icon: Icons.track_changes,
-                          keyboardType: TextInputType.number,
-                        ),
-                        const SizedBox(height: 16),
-                        _buildDatePicker(),
-                      ],
+              // Başlık ve Kapat Butonu
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.addGoal,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: isDarkMode ? Colors.white : Colors.black87,
                     ),
                   ),
-                ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.close,
+                      color: isDarkMode ? Colors.white70 : Colors.black54,
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+
+              // Resim
+              Image.asset(
+                'assets/images/add_goals.png',
+                height: 120,
+                fit: BoxFit.contain,
               ),
               const SizedBox(height: 24),
-              ElevatedButton.icon(
-                onPressed: _saveGoal,
-                icon: const Icon(Icons.save),
-                label: Text(AppLocalizations.of(context)!.save),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 16,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+
+              // Form
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFormField(
+                      controller: _titleController,
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.goalTitle,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        filled: true,
+                        fillColor:
+                        isDarkMode ? Colors.white10 : Colors.grey.shade50,
+                      ),
+                      validator: (value) => _validateInput(
+                        value,
+                        AppLocalizations.of(context)!.goalTitle,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Kategori Seçimi
+                    DropdownButtonFormField<String>(
+                      value: _selectedCategory,
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.goalCategory,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        filled: true,
+                        fillColor:
+                        isDarkMode ? Colors.white10 : Colors.grey.shade50,
+                      ),
+                      items: CategoryData.categories.map((category) {
+                        return DropdownMenuItem<String>(
+                          value: category.key,
+                          child: Text(CategoryData.getCategoryName(
+                              category.key, context)),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedCategory = newValue!;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Hedef Miktarı
+                    TextFormField(
+                      controller: _targetAmountController,
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).goalTargetAmount,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        filled: true,
+                        fillColor:
+                        isDarkMode ? Colors.white10 : Colors.grey.shade50,
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) => _validateInput(
+                        value,
+                        AppLocalizations.of(context).goalTargetAmount,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    _buildInputField(
+                      controller: _descriptionController,
+                      label: 'Açıklama',
+                      maxLines: 3,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildDatePicker(),
+                    // Tarih Seçici
+                    const SizedBox(height: 24),
+
+                    // Kaydet Butonu
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: _saveGoal,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFF9966),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: Text(
+                          AppLocalizations.of(context)!.save,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -133,73 +205,70 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
   Widget _buildInputField({
     required TextEditingController controller,
     required String label,
-    required IconData icon,
     TextInputType? keyboardType,
     int maxLines = 1,
   }) {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        filled: true,
+        fillColor: Colors.white,
+        labelText: label, // AppTheme.textLight
       ),
       keyboardType: keyboardType,
       maxLines: maxLines,
-      validator: (value) => _validateInput(value, label),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return '$label boş bırakılamaz.';
+        }
+        return null;
+      },
     );
   }
 
+
+  // Mevcut yardımcı metodlar aynı kalacak
   Widget _buildDatePicker() {
     return ListTile(
-      leading: const Icon(Icons.calendar_today),
+      leading: const Icon(Icons.calendar_today, color: Color(0xFF2E5077)), // AppTheme.accentLight
       title: Text(
         'Son Tarih: ${DateFormat('dd/MM/yyyy').format(_dueDate)}',
-        style: const TextStyle(fontSize: 16),
+        style: const TextStyle(fontSize: 16, color: Color(0xFF2E5077)), // AppTheme.textLight
       ),
       onTap: () async {
-        final DateTime now = DateTime.now();
-        final DateTime firstDate = now;
-        final DateTime lastDate = DateTime(2025, 12, 31);
-
-        final DateTime? picked = await showDatePicker(
+        final pickedDate = await showDatePicker(
           context: context,
           initialDate: _dueDate,
-          firstDate: firstDate,
-          lastDate: lastDate,
-          locale: const Locale('tr', 'TR'),
+          firstDate: DateTime.now(),
+          lastDate: DateTime(2025, 12, 31),
           builder: (context, child) {
             return Theme(
               data: Theme.of(context).copyWith(
                 colorScheme: ColorScheme.light(
-                  primary: Theme.of(context).primaryColor,
+                  primary: const Color(0xFF4DA1A9), // AppTheme.primaryLight
                   onPrimary: Colors.white,
-                  surface: Colors.white,
-                  onSurface: Colors.black,
+                  surface: const Color(0xFFFFFBF2), // AppTheme.cardLight
+                  onSurface: const Color(0xFF2E5077), // AppTheme.textLight
                 ),
               ),
               child: child!,
             );
           },
         );
-
-        if (picked != null) {
+        if (pickedDate != null) {
           setState(() {
-            _dueDate = picked;
+            _dueDate = pickedDate;
           });
         }
       },
     );
   }
 
-  Future<void> _saveGoal() async {
+
+
+  void _saveGoal() async {
     if (_formKey.currentState!.validate()) {
       try {
-        debugPrint('Hedef kaydediliyor...');
-        debugPrint('Seçili kategori: $_selectedCategory');
-
         final goal = Goal(
           id: '',
           title: _titleController.text,
@@ -211,7 +280,6 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
           status: GoalStatus.notStarted,
         );
 
-        debugPrint('Oluşturulan hedef: ${goal.toMap()}');
         await _databaseService.addGoal(goal);
 
         if (mounted) {
@@ -222,9 +290,9 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
             ),
           );
           _confettiController.play();
+          Navigator.pop(context);
         }
       } catch (e) {
-        debugPrint('Hedef kaydetme hatası: $e');
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -242,63 +310,5 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
       return '$fieldName boş bırakılamaz';
     }
     return null;
-  }
-
-  String _getCategoryName(String categoryKey) {
-    final localizations = AppLocalizations.of(context)!;
-    switch (categoryKey) {
-      case 'categoryHealth':
-        return localizations.categoryHealth;
-      case 'categoryFinance':
-        return localizations.categoryFinance;
-      case 'categoryCareer':
-        return localizations.categoryCareer;
-      case 'categoryEducation':
-        return localizations.categoryEducation;
-      case 'categorySports':
-        return localizations.categorySports;
-      case 'categoryHobby':
-        return localizations.categoryHobby;
-      case 'categoryTravel':
-        return localizations.categoryTravel;
-      case 'categoryPersonal':
-        return localizations.categoryPersonal;
-      default:
-        return categoryKey;
-    }
-  }
-
-  Widget _buildCategoryPicker() {
-    final localizations = AppLocalizations.of(context)!;
-    final categories = [
-      'categoryHealth',
-      'categoryFinance',
-      'categoryCareer',
-      'categoryEducation',
-      'categorySports',
-      'categoryHobby',
-      'categoryTravel',
-      'categoryPersonal',
-    ];
-
-    return DropdownButtonFormField<String>(
-      value: _selectedCategory,
-      decoration: InputDecoration(
-        labelText: localizations.goalCategory,
-      ),
-      items: categories.map((String categoryKey) {
-        return DropdownMenuItem<String>(
-          value: categoryKey,
-          child: Text(_getCategoryName(categoryKey)),
-        );
-      }).toList(),
-      onChanged: (String? newValue) {
-        setState(() {
-          _selectedCategory = newValue!;
-        });
-      },
-      validator: (value) =>
-      value == null ? localizations.noCategorySelected : null,
-    );
   }
 }

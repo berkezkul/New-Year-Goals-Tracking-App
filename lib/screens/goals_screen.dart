@@ -137,7 +137,8 @@ class _GoalsScreenState extends State<GoalsScreen> {
                       );
                     },
                     categoryName:
-                        CategoryData.getCategoryName(goal.category, context), onLongPress: () {  },
+                        CategoryData.getCategoryName(goal.category, context),
+                    onLongPress: () {},
                   );
                 },
               );
@@ -153,6 +154,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
 
     showDialog(
       context: context,
+      barrierColor: Colors.black54,
       builder: (context) => AlertDialog(
         title: Text(goal.title),
         content: Column(
