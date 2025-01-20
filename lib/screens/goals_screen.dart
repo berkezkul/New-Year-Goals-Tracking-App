@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../models/category_model.dart';
 import '../models/goal_model.dart';
+import '../providers/locale_provider.dart';
+import '../providers/theme_provider.dart';
 import '../services/database_service.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/goal_card.dart';
 import '../widgets/motivation_card.dart';
+import '../widgets/notifications_sheet.dart';
 
 class GoalsScreen extends StatefulWidget {
   const GoalsScreen({super.key});
@@ -20,7 +25,59 @@ class _GoalsScreenState extends State<GoalsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Scaffold(
+    appBar: AppBar(
+      elevation: 0,
+      title: Text(
+        AppLocalizations.of(context).appTitle,
+        style: GoogleFonts.inter(
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.notifications_outlined),
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) => NotificationsSheet(),
+              backgroundColor: Colors.transparent,
+            );
+          },
+        ),
+        IconButton(
+          icon: Consumer<ThemeProvider>(
+            builder: (context, themeProvider, child) {
+              return Icon(
+                themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+              );
+            },
+          ),
+          onPressed: () {
+            Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+          },
+        ),
+        PopupMenuButton<Locale>(
+          icon: const Icon(Icons.language),
+          onSelected: (Locale locale) {
+            Provider.of<LocaleProvider>(context, listen: false)
+                .setLocale(locale);
+          },
+          itemBuilder: (BuildContext context) => [
+            const PopupMenuItem(
+              value: Locale('tr', 'TR'),
+              child: Text('Türkçe'),
+            ),
+            const PopupMenuItem(
+              value: Locale('en', 'US'),
+              child: Text('English'),
+            ),
+          ],
+        ),
+      ],
+    ),
+    body: Column(
       children: [
         // Motivasyon kartı
         const MotivationCard(),
@@ -146,6 +203,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
           ),
         ),
       ],
+    ),
     );
   }
 

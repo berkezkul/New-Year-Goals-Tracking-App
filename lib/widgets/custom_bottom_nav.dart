@@ -42,8 +42,14 @@ class CustomBottomNav extends StatelessWidget {
         BottomNavigationBarItem(
           icon: const Icon(Icons.insert_chart_outlined),
           activeIcon: const Icon(Icons.insert_chart),
-          label: AppLocalizations.of(context).statistics,
+          label: AppLocalizations.of(context).notifications,
         ),
+        const BottomNavigationBarItem(
+          icon: Icon(Icons.checklist_outlined),
+          activeIcon: Icon(Icons.checklist),
+          label: 'Daily',
+        ),
+
       ],
     );
   }
